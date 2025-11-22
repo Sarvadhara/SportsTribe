@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabaseClient";
 
 interface User {
   id: string;
@@ -20,34 +19,30 @@ export default function UsersManagement() {
 
   const fetchUsers = async () => {
     try {
-      // Note: This is a simplified version. In production, you'd need proper RLS policies
-      // and admin-only endpoints to fetch user data
-      const { data: { user } } = await supabase.auth.getUser();
+      // TODO: Implement proper user fetching with admin authentication
+      // This will fetch from user_profiles table with proper admin access
       
-      if (user) {
-        // For demo purposes, showing current user and some mock data
-        // In production, fetch from a users table with proper admin access
-        setUsers([
-          {
-            id: user.id,
-            email: user.email || "unknown@example.com",
-            created_at: user.created_at || new Date().toISOString(),
-            role: "admin",
-          },
-          {
-            id: "2",
-            email: "user1@example.com",
-            created_at: new Date().toISOString(),
-            role: "user",
-          },
-          {
-            id: "3",
-            email: "user2@example.com",
-            created_at: new Date().toISOString(),
-            role: "user",
-          },
-        ]);
-      }
+      // For now, showing mock data
+      setUsers([
+        {
+          id: "1",
+          email: "user1@example.com",
+          created_at: new Date().toISOString(),
+          role: "user",
+        },
+        {
+          id: "2",
+          email: "user2@example.com",
+          created_at: new Date().toISOString(),
+          role: "user",
+        },
+        {
+          id: "3",
+          email: "user3@example.com",
+          created_at: new Date().toISOString(),
+          role: "user",
+        },
+      ]);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {

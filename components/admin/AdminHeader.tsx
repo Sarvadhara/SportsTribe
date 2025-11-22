@@ -1,9 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { logout } from "@/lib/localAuth";
-import { AdminUser } from "@/lib/localAuth";
 import Logo from "@/components/Logo";
+
+// Temporary AdminUser interface (will be replaced with real auth)
+interface AdminUser {
+  id: string;
+  email: string;
+  role: string;
+}
 
 interface AdminHeaderProps {
   user: AdminUser | null;
@@ -16,11 +21,11 @@ export default function AdminHeader({ user, onMenuClick, sidebarOpen = true }: A
   const router = useRouter();
 
   const handleLogout = () => {
-    logout();
-    // Clear state before redirecting
+    // TODO: Implement logout with Supabase Auth
+    // await supabase.auth.signOut();
     setShowDropdown(false);
     router.push("/admin/login");
-    router.refresh(); // Force refresh to clear auth state
+    router.refresh();
   };
 
   return (
@@ -82,4 +87,3 @@ export default function AdminHeader({ user, onMenuClick, sidebarOpen = true }: A
     </header>
   );
 }
-
