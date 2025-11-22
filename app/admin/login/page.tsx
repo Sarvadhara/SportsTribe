@@ -1,7 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { login, checkAdminAccess } from "@/lib/localAuth";
+import { useState } from "react";
 import Logo from "@/components/Logo";
 
 export default function AdminLogin() {
@@ -9,49 +7,24 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(true);
-  const router = useRouter();
-
-  // Redirect if already logged in
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hasAccess = checkAdminAccess();
-      if (hasAccess) {
-        router.push("/admin");
-      } else {
-        setChecking(false);
-      }
-    }
-  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    try {
-      await login(email, password);
-      // Small delay to ensure localStorage is saved
-      await new Promise(resolve => setTimeout(resolve, 100));
-      router.push("/admin");
-      router.refresh(); // Force refresh to update auth state
-    } catch (err: any) {
-      setError(err.message || "Invalid credentials");
-    } finally {
-      setLoading(false);
-    }
+    // TODO: Implement authentication with whitelist system
+    // This will be implemented based on the workflow:
+    // 1. Check if email is in admin_whitelist
+    // 2. Create Supabase Auth account
+    // 3. Send verification email
+    // 4. Verify email
+    // 5. Create user_profiles with is_admin = TRUE
+    // 6. Login
+    
+    setError("Authentication not yet implemented. Please implement the whitelist workflow.");
+    setLoading(false);
   };
-
-  if (checking) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1A063B] via-[#2C0C5B] to-[#1A063B] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6A3D] mb-4"></div>
-          <div className="text-white text-xl">Checking authentication...</div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1A063B] via-[#2C0C5B] to-[#1A063B] flex items-center justify-center p-4">
@@ -62,14 +35,6 @@ export default function AdminLogin() {
           </div>
           <h1 className="text-3xl font-bold text-st-white mb-2">Admin Panel</h1>
           <p className="text-st-text/70">Sign in to manage your website</p>
-          <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-xs text-blue-300">
-              <strong>Default Login:</strong> admin@sportstribe.com / admin123
-            </p>
-            <p className="text-xs text-blue-300 mt-1">
-              Or use any email containing "admin" with any password
-            </p>
-          </div>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8 shadow-xl">
@@ -91,7 +56,7 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-st-white placeholder-st-text/50 focus:outline-none focus:ring-2 focus:ring-[#FF6A3D] focus:border-transparent transition-all"
-                placeholder="admin@sportstribe.com"
+                placeholder="Enter your email"
               />
             </div>
 
@@ -106,7 +71,7 @@ export default function AdminLogin() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-st-white placeholder-st-text/50 focus:outline-none focus:ring-2 focus:ring-[#FF6A3D] focus:border-transparent transition-all"
-                placeholder="••••••••"
+                placeholder="Enter your password"
               />
             </div>
 
@@ -129,4 +94,3 @@ export default function AdminLogin() {
     </div>
   );
 }
-
